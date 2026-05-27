@@ -26,18 +26,17 @@ jobs:
           gzip -9 -k -f Packages
           bzip2 -9 -k -f Packages
 
-      - name: Generate Release
-        run: |
-          cat > Release <<EOF
-          Origin: GLITCHLORDX Repo
-          Label: GLITCHLORDX Repo
-          Suite: stable
-          Version: 1.0
-          Codename: ios
-          Architectures: iphoneos-arm
-          Components: main
-          Description: iOS tweaks repo
-          EOF
+            - name: Generate Release
+         run: |
+          rm -f Release
+          echo "Origin: GLITCHLORDX Repo" >> Release
+          echo "Label: GLITCHLORDX Repo" >> Release
+          echo "Suite: stable" >> Release
+          echo "Version: 1.0" >> Release
+          echo "Codename: ios" >> Release
+          echo "Architectures: iphoneos-arm" >> Release
+          echo "Components: main" >> Release
+          echo "Description: iOS tweaks repo" >> Release
 
             - name: Commit files
           run: |
