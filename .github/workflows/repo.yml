@@ -1,0 +1,41 @@
+name: Build Repo
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dpkg tools
+        run: |
+          sudo apt update
+          sudo apt install dpkg-dev -y
+
+      - name: Generate Packages
+        run: |
+          dpkg-scanpackages debs /dev/null > Packages
+          gzip -9 -k -f Packages
+
+      - name: Generate Release
+        run: |
+          echo "Origin: Master Repo" > Release
+          echo "Label: Master Repo" >> Release
+          echo "Suite: stable" >> Release
+          echo "Version: 1.0" >> Release
+          echo "Codename: ios" >> Release
+          echo "Architectures: iphoneos-arm" >> Release
+          echo "Components: main" >> Release
+          echo "Description: Personal Repo" >> Release
+
+      - name: Commit files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add Packages Packages.gz Release
+          git commit -m "Update repo files" || echo "No changes"
+          git push
