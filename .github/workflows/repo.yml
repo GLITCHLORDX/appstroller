@@ -20,12 +20,14 @@ jobs:
           sudo apt update
           sudo apt install dpkg-dev bzip2 gzip -y
 
-      - name: Generate Packages
-        run: |
+           - name: Generate Packages
+          run: |
           rm -f Packages Packages.gz Packages.bz2
-          dpkg-scanpackages ./debs / > Packages
-          gzip -9 -k -f Packages
-          bzip2 -9 -k -f Packages
+          dpkg-scanpackages debs > Packages
+          sed -i 's/^Section: .*/Section: Tweaks/' Packages
+          sed -i 's/^Architecture: .*/Architecture: iphoneos-arm/' Packages
+          gzip -k -f Packages
+          bzip2 -k -f Packages
 
       - name: Generate Release
         run: |
