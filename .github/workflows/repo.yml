@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
 
+permissions:
+  contents: write
+
 jobs:
   repo:
     runs-on: ubuntu-latest
@@ -11,31 +14,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dpkg tools
+      - name: Install tools
         run: |
           sudo apt update
-          sudo apt install dpkg-dev -y
+          sudo apt install dpkg-dev bzip2 gzip -y
 
       - name: Generate Packages
         run: |
-          dpkg-scanpackages debs /dev/null > Packages
+          rm -f Packages Packages.gz Packages.bz2
+          dpkg-scanpackages ./debs / > Packages
           gzip -9 -k -f Packages
+          bzip2 -9 -k -f Packages
 
       - name: Generate Release
         run: |
-          echo "Origin: Master Repo" > Release
-          echo "Label: Master Repo" >> Release
-          echo "Suite: stable" >> Release
-          echo "Version: 1.0" >> Release
-          echo "Codename: ios" >> Release
-          echo "Architectures: iphoneos-arm" >> Release
-          echo "Components: main" >> Release
-          echo "Description: Personal Repo" >> Release
+          cat > Release <<EOF
+          Origin: GLITCHLORDX Repo
+          Label: GLITCHLORDX Repo
+          Suite: stable
+          Version: 1.0
+          Codename: ios
+          Architectures: iphoneos-arm
+          Components: main
+          Description: iOS tweaks repo
+          EOF
 
       - name: Commit files
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add Packages Packages.gz Release
-          git commit -m "Update repo files" || echo "No changes"
+          git add Packages Packages.gz Packages.bz2 Release
+          git commit -m "Update repo index" || echo "No changes"
           git push
