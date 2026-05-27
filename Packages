@@ -4,7 +4,7 @@ Architecture: iphoneos-arm
 Maintainer: Mineek
 Installed-Size: 120
 Depends: mobilesubstrate (>= 0.9.5000), preferenceloader
-Filename: debs/dev.mineek.appstoretroller_0.0.1-iphoneos12_iphoneos-arm.deb
+Filename: ./debs/dev.mineek.appstoretroller_0.0.1-iphoneos12_iphoneos-arm.deb
 Size: 5800
 MD5sum: 3a73bebfacc7af9efa5c8baeacd50f49
 SHA1: 6fd1e1f400ea5d462022bfa83b3a058dc12cb49e
